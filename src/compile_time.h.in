@@ -1,0 +1,29 @@
+/*
+ SPDX-License-Identifier: GPL-3.0-or-later
+ (c) 2025 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/kebacc
+*/
+
+/**
+ * This file contains central definitions and is included in each source file
+ * as first include. Some defines are configured by cmake.
+ */
+
+#ifndef KEBACC_COMPILE_TIME_H
+#define KEBACC_COMPILE_TIME_H
+
+#include <signal.h>
+
+//Version from cmake
+#define KEBACC_VERSION "${PROJECT_VERSION}"
+
+#define KEBA_API_PORT 7090
+
+//log level
+#define LOGLEVEL_MIN 0
+#define LOGLEVEL_MAX 7
+
+//signal handler
+extern sig_atomic_t s_signal_received;
+
+#endif
