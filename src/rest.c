@@ -55,12 +55,12 @@ void ev_handler_rest(struct mg_connection *nc, int ev, void *ev_data) {
 static bool rest_get(struct mg_connection *nc, struct mg_http_message *hm) {
     struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) nc->mgr->userdata;
     if (mg_strcmp(hm->uri, mg_str("/status")) == 0) {
-        char *json = mg_mprintf("{\"responses\": ["
-            "{\"ts\": %lld,\"i\":{%s}},"
-            "{\"ts\": %lld,\"report1\":%s},"
-            "{\"ts\": %lld,\"report2\":%s},"
-            "{\"ts\": %lld,\"report3\":%s}"
-            "]}",
+        char *json = mg_mprintf("{"
+                "\"i\":{\"ts\":%lld,\"response\":{%s}},"
+                "\"report1\":{\"ts\":%lld,\"response\":%s},"
+                "\"report2\":{\"ts\":%lld,\"response\":%s},"
+                "\"report3\":{\"ts\":%lld,\"response\":%s}"
+            "}",
             (long long)mg_user_data->wallbox_status.i.ts, mg_user_data->wallbox_status.i.response,
             (long long)mg_user_data->wallbox_status.report1.ts, mg_user_data->wallbox_status.report1.response,
             (long long)mg_user_data->wallbox_status.report2.ts, mg_user_data->wallbox_status.report2.response,
