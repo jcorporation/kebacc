@@ -22,6 +22,11 @@
 #define WALLBOX_API_PORT 7090
 #define WORKDIR "/var/lib/kebacc"
 #define POLL_INTERVAL 60000
+#define RRDCACHED_URI ""
+
+// rrd filenames
+#define RRD_REPORT2 "report2.rrd"
+#define RRD_REPORT3 "report3.rrd"
 
 // Log level
 #define LOGLEVEL_MIN 0

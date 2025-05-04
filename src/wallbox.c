@@ -15,7 +15,7 @@
 #include "src/lib/log.h"
 #include "src/lib/mg_user_data.h"
 
- /**
+/**
  * Generic timer handler to poll data from the wallbox
  * @param arg Pointer to mongoose mgr
  * @param arg Command to send

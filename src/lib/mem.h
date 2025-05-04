@@ -29,9 +29,9 @@ static inline void *malloc_assert(size_t size) {
  * @param PTR pointer to free
  */
 #define FREE_PTR(PTR) do { \
-    if (PTR != NULL) \
+    if ((PTR) != NULL) \
         free(PTR); \
-    PTR = NULL; \
+    (PTR) = NULL; \
 } while (0)
 
 #endif

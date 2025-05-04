@@ -33,9 +33,6 @@ int main(int argc, char **argv) {
         set_loglevel(LOG_NOTICE);
     #endif
 
-    //only owner should have rw access
-    umask(0077);
-
     //central data structures
     struct t_mg_user_data *mg_user_data = NULL;
     struct mg_mgr *mgr = NULL;

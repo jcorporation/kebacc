@@ -12,9 +12,11 @@
 #include "src/data_handler.h"
 
 #include "src/lib/filehandler.h"
-#include "src/lib/mg_user_data.h"
 #include "src/lib/log.h"
 #include "src/lib/mem.h"
+#include "src/lib/mg_user_data.h"
+
+#include "src/rrdcached.h"
 
 // Private definitions
 
@@ -28,14 +30,14 @@ static void setdata(struct t_wallbox_response *response, char *data);
  * @param mg_user_data Pointer to t_mg_user_data struct
  * @param buf Pointer to buffer with received data 
  */
-void data_handler(struct mg_connection *nc) {
+bool data_handler(struct mg_connection *nc) {
     struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) nc->mgr->userdata;
     struct t_config *config = mg_user_data->config;
-    // Copy received data in NULL-terminated string while removing new lines.
+    // Copy received data in NULL-terminated string while removing white space characters.
     char *data = malloc_assert(nc->recv.len + 1);
     size_t data_len = 0;
     for (size_t i = 0; i < nc->recv.len; i++) {
-        if (nc->recv.buf[i] != '\n') {
+        if (isblank(nc->recv.buf[i]) == false) {
             data[data_len++] = (char)nc->recv.buf[i];
         }
     }
@@ -44,32 +46,44 @@ void data_handler(struct mg_connection *nc) {
     KEBACC_LOG_DEBUG("Received data: %s", data);
     if (data_len < 8) {
         KEBACC_LOG_ERROR("Invalid data received.");
-        return;
+        return false;
     }
     switch(data[8]) {
         case 'e':
             setdata(&mg_user_data->wallbox_status.i, data);
             write_data_to_file(config->workdir, "wallbox_i.txt", data, data_len);
-            break;
+            return true;
         case '1':
             setdata(&mg_user_data->wallbox_status.report1, data);
             write_data_to_file(config->workdir, "wallbox_report1.json", data, data_len);
-            break;
+            return true;
         case '2':
             setdata(&mg_user_data->wallbox_status.report2, data);
             write_data_to_file(config->workdir, "wallbox_report2.json", data, data_len);
-            break;
+            if (config->rrdcached_uri[0] != '\0') {
+                send_data_to_rrdcached(nc->mgr, WALLBOX_REPORT2, &mg_user_data->wallbox_status.report2);
+            }
+            return true;
         case '3':
             setdata(&mg_user_data->wallbox_status.report3, data);
             write_data_to_file(config->workdir, "wallbox_report3.json", data, data_len);
-            break;
+            if (config->rrdcached_uri[0] != '\0') {
+                send_data_to_rrdcached(nc->mgr, WALLBOX_REPORT3, &mg_user_data->wallbox_status.report3);
+            }
+            return true;
         default:
             KEBACC_LOG_WARN("Unhandled data received: %c", data[7]);
     }
+    return false;
 }
 
 // Private functions
 
+/**
+ * Saves the wallbox data internally. This data is used in the REST API implementation.
+ * @param response Pointer to t_wallbox_response struct
+ * @param data Data to store
+ */
 static void setdata(struct t_wallbox_response *response, char *data) {
     FREE_PTR(response->response);
     response->response = data;

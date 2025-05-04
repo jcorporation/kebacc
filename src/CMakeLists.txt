@@ -28,6 +28,7 @@ target_sources(kebacc
     data_handler.c
     main.c
     rest.c
+    rrdcached.c
     server.c
     wallbox.c
 )

@@ -15,6 +15,6 @@
 
 #include "dist/mongoose/mongoose.h"
 
-void data_handler(struct mg_connection *nc);
+bool data_handler(struct mg_connection *nc);
 
 #endif

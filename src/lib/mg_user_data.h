@@ -38,8 +38,9 @@ struct t_wallbox_status {
  */
 struct t_mg_user_data {
     struct t_config *config;                  //!< Pointer to Kebacc configuration
+    struct t_wallbox_status wallbox_status;   //!< Last polled wallbox status
     struct mg_connection *wallbox_conn;       //!< Pointer to UDP listener for wallbox communication
-    struct t_wallbox_status wallbox_status;  //!< Last polled wallbox status
+    struct mg_connection *rrdached_conn;      //!< Pointer to the rrdached connection
 };
 
 struct t_mg_user_data *mg_user_data_new(struct t_config *config);

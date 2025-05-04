@@ -69,28 +69,28 @@ static bool rest_get(struct mg_connection *nc, struct mg_http_message *hm) {
         FREE_PTR(json);
         return true;
     }
-    else if (mg_strcmp(hm->uri, mg_str("/status/i")) == 0) {
+    if (mg_strcmp(hm->uri, mg_str("/status/i")) == 0) {
         char *json = mg_mprintf("{\"ts\": %lld,\"i\":{%s}}",
             (long long)mg_user_data->wallbox_status.i.ts, mg_user_data->wallbox_status.i.response);
         mg_http_reply(nc, 200, response_headers, "%s", json);
         FREE_PTR(json);
         return true;
     }
-    else if (mg_strcmp(hm->uri, mg_str("/status/report1")) == 0) {
+    if (mg_strcmp(hm->uri, mg_str("/status/report1")) == 0) {
         char *json = mg_mprintf("{\"ts\": %lld,\"report1\":%s}",
             (long long)mg_user_data->wallbox_status.report1.ts, mg_user_data->wallbox_status.report1.response);
         mg_http_reply(nc, 200, response_headers, "%s", json);
         FREE_PTR(json);
         return true;
     }
-    else if (mg_strcmp(hm->uri, mg_str("/status/report2")) == 0) {
+    if (mg_strcmp(hm->uri, mg_str("/status/report2")) == 0) {
         char *json = mg_mprintf("{\"ts\": %lld,\"report2\":%s}",
             (long long)mg_user_data->wallbox_status.report2.ts, mg_user_data->wallbox_status.report2.response);
         mg_http_reply(nc, 200, response_headers, "%s", json);
         FREE_PTR(json);
         return true;
     }
-    else if (mg_strcmp(hm->uri, mg_str("/status/report3")) == 0) {
+    if (mg_strcmp(hm->uri, mg_str("/status/report3")) == 0) {
         char *json = mg_mprintf("{\"ts\": %lld,\"report3\":%s}",
             (long long)mg_user_data->wallbox_status.report3.ts, mg_user_data->wallbox_status.report3.response);
         mg_http_reply(nc, 200, response_headers, "%s", json);

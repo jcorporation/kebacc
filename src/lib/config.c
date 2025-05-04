@@ -26,6 +26,7 @@ struct t_config *kebacc_config_new(void) {
     config->wallbox_ip = strdup(WALLBOX_IP);
     config->workdir = strdup(WORKDIR);
     config->poll = POLL_INTERVAL;
+    config->rrdcached_uri = strdup(RRDCACHED_URI);
     return config;
 }
 

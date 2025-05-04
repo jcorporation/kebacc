@@ -20,6 +20,7 @@ struct t_config {
     char *wallbox_listen;  //!< Listening URI for wallbox communication
     char *wallbox_ip;      //!< Wallbox IP
     char *workdir;         //!< Working directory
+    char *rrdcached_uri;   //!< URI of rrdcached to send data
 };
 
 struct t_config *kebacc_config_new(void);

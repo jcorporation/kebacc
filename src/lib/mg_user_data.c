@@ -32,6 +32,7 @@ struct t_mg_user_data *mg_user_data_new(struct t_config *config) {
     mg_user_data->wallbox_status.report2.ts = 0;
     mg_user_data->wallbox_status.report3.response = strdup("{}");
     mg_user_data->wallbox_status.report3.ts = 0;
+    mg_user_data->rrdached_conn = NULL;
     return mg_user_data;
 }
 

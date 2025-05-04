@@ -21,6 +21,7 @@ Keba UDP API Client 0.0.1
 https://github.com/jcorporation/kebacc
 
 Options:
+  -d, --rrdcached <uri>   rrdcached uri (default: )
   -h, --help              Displays this help
   -i, --wallbox <ip>      IP Address of your Keba wallbox
   -l, --listen <uri>      Wallbox listen URI (default: udp://0.0.0.0:7090)
@@ -55,3 +56,28 @@ The REST API response with a timestamp and the original response from the wallbo
 | GET | `/status/report1` | Response to `report 1` command. |
 | GET | `/status/report2` | Response to `report 2` command. |
 | GET | `/status/report3` | Response to `report 3` command. |
+
+## Rrdcached
+
+Wallbox data from `report 2` and `report 3` can be sent to a rrdcached instance. To enable this, set a valid rrdcached URI (e. g. `tcp://127.0.0.1:42217`).
+
+### RRD Definitions
+
+```sh
+rrdtool create /var/lib/kebacc/report1.rrd --start now-2h --step 1m \
+    DS:state:GAUGE:2m:0:U \
+    DS:maxcurr:GAUGE:2m:0:U \
+    RRA:AVERAGE:0.5:1m:2d \
+    RRA:AVERAGE:0.5:5m:8d \
+    RRA:AVERAGE:0.5:15m:2y \
+    RRA:AVERAGE:0.5:1h:20y \
+    RRA:AVERAGE:0.5:1d:30y
+
+rrdtool create /var/lib/kebacc/report2.rrd --start now-2h --step 1m \
+    DS:p:GAUGE:2m:0:U \
+    RRA:AVERAGE:0.5:1m:2d \
+    RRA:AVERAGE:0.5:5m:8d \
+    RRA:AVERAGE:0.5:15m:2y \
+    RRA:AVERAGE:0.5:1h:20y \
+    RRA:AVERAGE:0.5:1d:30y
+```
