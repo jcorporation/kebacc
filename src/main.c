@@ -8,51 +8,14 @@
 
 #include "dist/mongoose/mongoose.h"
 
-#include "src/config.h"
-#include "src/log.h"
-#include "src/mg_user_data.h"
-#include "src/options.h"
-#include "src/udpserver.h"
+#include "src/lib/config.h"
+#include "src/lib/log.h"
+#include "src/lib/mem.h"
+#include "src/lib/mg_user_data.h"
+#include "src/lib/options.h"
+#include "src/server.h"
 
 #include <errno.h>
-
-//signal handler
-sig_atomic_t s_signal_received;
-
-/**
- * Signal handler
- * @param sig_num the signal to handle
- */
-static void kebacc_signal_handler(int sig_num) {
-    switch(sig_num) {
-        case SIGTERM:
-        case SIGINT: {
-            KEBACC_LOG_NOTICE("Signal \"%s\" received, exiting", (sig_num == SIGTERM ? "SIGTERM" : "SIGINT"));
-            //Set loop end condition for threads
-            s_signal_received = sig_num;
-            break;
-        }
-        default: {
-            //Other signals are not handled
-        }
-    }
-}
-
-/**
- * Sets the kebacc_signal_handler for the given signal
- * @param sig_num signal to handle
- * @return true on success, else false
- */
-static bool set_signal_handler(int sig_num) {
-    struct sigaction sa;
-    sa.sa_handler = kebacc_signal_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART; // Restart functions if interrupted by handler
-    if (sigaction(sig_num, &sa, NULL) == -1) {
-        return false;
-    }
-    return true;
-}
 
 /**
  * The main function.
@@ -74,7 +37,6 @@ int main(int argc, char **argv) {
     umask(0077);
 
     //central data structures
-    s_signal_received = 0;
     struct t_mg_user_data *mg_user_data = NULL;
     struct mg_mgr *mgr = NULL;
     int rc = EXIT_FAILURE;
@@ -116,25 +78,15 @@ int main(int argc, char **argv) {
         goto cleanup;
     }
 
-    //set signal handler
-    if (set_signal_handler(SIGTERM) == false ||
-        set_signal_handler(SIGINT) == false)
-    {
-        KEBACC_LOG_EMERG("Could not set signal handler for SIGTERM and SIGINT");
-        goto cleanup;
-    }
-
     //init udpserver
-    mgr = malloc(sizeof(struct mg_mgr));
-    assert(mgr);
-    mg_user_data = malloc(sizeof(struct t_mg_user_data));
-    assert(mg_user_data);
-    if (udpserver_init(mgr, config, mg_user_data) == false) {
+    mg_user_data = mg_user_data_new(config);
+    mgr = malloc_assert(sizeof(struct mg_mgr));
+    if (mongoose_init(mgr, config, mg_user_data) == false) {
         goto cleanup;
     }
 
     //Run the udpserver
-    udpserver_loop(mgr);
+    mongoose_loop(mgr);
     rc = EXIT_SUCCESS;
 
     //Try to cleanup all
@@ -143,7 +95,7 @@ int main(int argc, char **argv) {
     kebacc_config_free(config);
 
     if (mgr != NULL) {
-        udpserver_free(mgr);
+        mongoose_free(mgr);
     }
     if (mg_user_data != NULL) {
         mg_user_data_free(mg_user_data);

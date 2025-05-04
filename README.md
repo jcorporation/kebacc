@@ -1,6 +1,8 @@
 # Client for the Keba Wallbox UDP API
 
-This is an implementation for the Keba Wallbox UDP API. It is written in C and has no dependencies.
+This is an implementation for the Keba Wallbox UDP API. It is written in C and has no dependencies besides standard C library functions.
+
+It is based on the great [Mongoose - Embedded Web Server / Embedded Network Library](https://github.com/cesanta/mongoose).
 
 ## Compile
 
@@ -12,7 +14,7 @@ make -C build
 ## Run
 
 ```sh
-Usage: build/bin/kebacc [OPTION]...
+Usage: kebacc [OPTION]...
 
 Keba UDP API Client 0.0.1
 (c) 2025 Juergen Mang <mail@jcgames.de>
@@ -20,10 +22,36 @@ https://github.com/jcorporation/kebacc
 
 Options:
   -h, --help              Displays this help
-  -i, --wallbox <ip>      IP Adress of your Keba wallbox
-  -l, --listen <uri>      Listen URI (default: udp://0.0.0.0:7090)
+  -i, --wallbox <ip>      IP Address of your Keba wallbox
+  -l, --listen <uri>      Wallbox listen URI (default: udp://0.0.0.0:7090)
   -o, --loglevel <level>  Syslog loglevel (default: 5 - NOTICE)
   -p, --poll <seconds>    Polling interval in seconds (default: 60)
+  -r, --rest <uri>        REST listen URI (default: http://0.0.0.0:8090)
   -v, --version           Displays this help
   -w, --workdir <folder>  Working directory (default: /var/lib/kebacc)
 ```
+
+## Wallbox data polling
+
+- `i` is sent once, on startup
+- `report 1` is sent once, 10 seconds after startup
+- `report 2` is sent each poll interval seconds
+- `report 3` is sent each poll interval seconds, with an offset of 10 seconds from `report 2`
+
+The received data is then published in different ways.
+
+- As files in the working directory.
+- Via REST-API
+- Sent to [rrdcached](https://oss.oetiker.ch/rrdtool/doc/rrdcached.en.html)
+
+## REST API
+
+The REST API response with a timestamp and the original response from the wallbox.
+
+| METHOD | PATH | DESCRIPTION |
+| ------ | ---- | ----------- |
+| GET | `/status` | Response for all below commands. |
+| GET | `/status/i` | Response to `i` command. |
+| GET | `/status/report1` | Response to `report 1` command. |
+| GET | `/status/report2` | Response to `report 2` command. |
+| GET | `/status/report3` | Response to `report 3` command. |

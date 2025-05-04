@@ -9,10 +9,10 @@
  */
 
 #include "compile_time.h"
-#include "src/config.h"
+#include "src/lib/config.h"
 
-#include <assert.h>
-#include <stdlib.h>
+#include "src/lib/mem.h"
+
 #include <string.h>
 
 /**
@@ -20,9 +20,9 @@
  * @return config pointer to config struct
  */
 struct t_config *kebacc_config_new(void) {
-    struct t_config *config = malloc(sizeof(struct t_config));
-    assert(config);
-    config->listen = strdup("udp://0.0.0.0:7090");
+    struct t_config *config = malloc_assert(sizeof(struct t_config));
+    config->rest_listen = strdup("http://0.0.0.0:8090");
+    config->wallbox_listen = strdup("udp://0.0.0.0:7090");
     config->wallbox_ip = strdup("192.168.93.199");
     config->workdir = strdup("/var/lib/kebacc");
     config->poll = 60000;
@@ -35,8 +35,9 @@ struct t_config *kebacc_config_new(void) {
  * @param config pointer to config struct
  */
 void kebacc_config_free(struct t_config *config) {
-    free(config->listen);
-    free(config->wallbox_ip);
-    free(config->workdir);
-    free(config);
+    FREE_PTR(config->rest_listen);
+    FREE_PTR(config->wallbox_listen);
+    FREE_PTR(config->wallbox_ip);
+    FREE_PTR(config->workdir);
+    FREE_PTR(config);
 }

@@ -9,7 +9,7 @@
  */
 
 #include "compile_time.h"
-#include "src/log.h"
+#include "src/lib/log.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -90,12 +90,9 @@ void set_loglevel(int level) {
 /**
  * Logs the errno string
  * This function should be called by the suitable macro
- * @param file filename for debug logging
- * @param line linenumber for debug logging
- * @param partition mpd partition
  * @param errnum errno
  */
-void kebacc_log_errno(const char *file, int line, int errnum) {
+void kebacc_log_errno(int errnum) {
     if (errnum == 0) {
         //do not log success
         return;
@@ -105,19 +102,17 @@ void kebacc_log_errno(const char *file, int line, int errnum) {
     const char *err_str = rc == 0
         ? err_text
         : "Unknown error";
-    kebacc_log(LOG_ERR, file, line, "%s", err_str);
+    kebacc_log(LOG_ERR, "%s", err_str);
 }
 
 /**
- * Logs the errno string
+ * Logs the fmt string
  * This function should be called by the suitable macro
  * @param level loglevel of the message
- * @param file filename for debug logging
- * @param line linenumber for debug logging
  * @param fmt format string to print
  * @param ... arguments for the format string
  */
-void kebacc_log(int level, const char *file, int line, const char *fmt, ...) {
+void kebacc_log(int level, const char *fmt, ...) {
     if (level > loglevel) {
         return;
     }
@@ -131,13 +126,6 @@ void kebacc_log(int level, const char *file, int line, const char *fmt, ...) {
         }
     }
     printf("%-8s ", loglevel_names[level]);
-    #ifdef KEBACC_DEBUG
-        printf("%s:%i: ", file, line);
-    #else
-        (void)file;
-        (void)line;
-    #endif
-
     va_list args;
     va_start(args, fmt);
     vprintf(fmt, args);

@@ -11,7 +11,7 @@
 #ifndef KEBACC_OPTIONS_H
 #define KEBACC_OPTIONS_H
 
-#include "src/config.h"
+#include "src/lib/config.h"
 
 #include <stdbool.h>
 

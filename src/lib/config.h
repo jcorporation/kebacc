@@ -17,7 +17,8 @@
  * Static kebacc configuration
  */
 struct t_config {
-    char *listen;
+    char *rest_listen;
+    char *wallbox_listen;
     char *wallbox_ip;
     char *workdir;
     unsigned long poll;

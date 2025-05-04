@@ -9,9 +9,9 @@
  */
 
 #include "compile_time.h"
-#include "src/options.h"
+#include "src/lib/options.h"
 
-#include "src/config.h"
+#include "src/lib/config.h"
 
 #include <getopt.h>
 #include <stdio.h>
@@ -26,6 +26,7 @@ static struct option long_options[] = {
     {"listen",   required_argument, 0, 'l'},
     {"loglevel", required_argument, 0, 'o'},
     {"poll",     required_argument, 0, 'p'},
+    {"rest",     required_argument, 0, 'r'},
     {"version",  no_argument,       0, 'v'},
     {"wallbox",  required_argument, 0, 'i'},
     {"workdir",  required_argument, 0, 'w'}
@@ -44,12 +45,13 @@ static void print_usage(struct t_config *config, const char *cmd) {
                     "Options:\n"
                     "  -h, --help              Displays this help\n"
                     "  -i, --wallbox <ip>      IP Address of your Keba wallbox\n"
-                    "  -l, --listen <uri>      Listen URI (default: %s)\n"
+                    "  -l, --listen <uri>      Wallbox listen URI (default: %s)\n"
                     "  -o, --loglevel <level>  Syslog loglevel (default: 5 - NOTICE)\n"
                     "  -p, --poll <seconds>    Polling interval in seconds (default: %lu)\n"
+                    "  -r, --rest <uri>        REST listen URI (default: %s)\n"
                     "  -v, --version           Displays this help\n"
                     "  -w, --workdir <folder>  Working directory (default: %s)\n\n",
-        cmd, KEBACC_VERSION, config->listen, (config->poll / 1000), config->workdir);
+        cmd, KEBACC_VERSION, config->wallbox_listen, (config->poll / 1000), config->rest_listen, config->workdir);
 }
 
 /**
@@ -64,11 +66,11 @@ static void print_usage(struct t_config *config, const char *cmd) {
 enum handle_options_rc handle_options(struct t_config *config, int argc, char **argv) {
     int n = 0;
     int option_index = 0;
-    while ((n = getopt_long(argc, argv, "l:o:vhi:p:w:", long_options, &option_index)) != -1) {
+    while ((n = getopt_long(argc, argv, "l:o:vhi:p:r:w:", long_options, &option_index)) != -1) {
         switch(n) {
             case 'l':
-                free(config->listen);
-                config->listen = strdup(optarg);
+                free(config->wallbox_listen);
+                config->wallbox_listen = strdup(optarg);
                 break;
             case 'o':
                 //TODO
@@ -87,6 +89,10 @@ enum handle_options_rc handle_options(struct t_config *config, int argc, char **
                 config->poll = config->poll * 1000;
                 break;
             }
+            case 'r':
+                free(config->rest_listen);
+                config->rest_listen = strdup(optarg);
+                break;
             case 'w':
                 free(config->workdir);
                 config->workdir = strdup(optarg);

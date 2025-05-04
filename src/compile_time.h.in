@@ -12,8 +12,6 @@
 #ifndef KEBACC_COMPILE_TIME_H
 #define KEBACC_COMPILE_TIME_H
 
-#include <signal.h>
-
 //Version from cmake
 #define KEBACC_VERSION "${PROJECT_VERSION}"
 
@@ -22,8 +20,5 @@
 //log level
 #define LOGLEVEL_MIN 0
 #define LOGLEVEL_MAX 7
-
-//signal handler
-extern sig_atomic_t s_signal_received;
 
 #endif

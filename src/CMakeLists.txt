@@ -20,10 +20,14 @@ target_include_directories(kebacc
 
 target_sources(kebacc
   PRIVATE
-    config.c
-    log.c
+    lib/config.c
+    lib/filehandler.c
+    lib/log.c
+    lib/mg_user_data.c
+    lib/options.c
+    data_handler.c
     main.c
-    mg_user_data.c
-    options.c
-    udpserver.c
+    rest.c
+    server.c
+    wallbox.c
 )
