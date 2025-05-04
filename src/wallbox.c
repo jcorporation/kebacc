@@ -80,7 +80,7 @@ void ev_handler_wallbox(struct mg_connection *nc, int ev, void *ev_data) {
         // we must use 7090 as source port. The listening connection has no remote peer,
         // we set it manually. A bit low level, but it works.
         // https://github.com/cesanta/mongoose/discussions/3124
-        nc->rem.port = mg_htons(KEBA_API_PORT);
+        nc->rem.port = mg_htons(WALLBOX_API_PORT);
         mg_aton(mg_str(config->wallbox_ip), (struct mg_addr *)nc->rem.ip);
         // Send initial request
         KEBACC_LOG_DEBUG("Sending \"i\"");

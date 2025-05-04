@@ -21,14 +21,13 @@
  */
 struct t_config *kebacc_config_new(void) {
     struct t_config *config = malloc_assert(sizeof(struct t_config));
-    config->rest_listen = strdup("http://0.0.0.0:8090");
-    config->wallbox_listen = strdup("udp://0.0.0.0:7090");
-    config->wallbox_ip = strdup("192.168.93.199");
-    config->workdir = strdup("/var/lib/kebacc");
-    config->poll = 60000;
+    config->rest_listen = strdup(REST_LISTEN);
+    config->wallbox_listen = strdup(WALLBOX_LISTEN);
+    config->wallbox_ip = strdup(WALLBOX_IP);
+    config->workdir = strdup(WORKDIR);
+    config->poll = POLL_INTERVAL;
     return config;
 }
-
 
 /**
  * Frees the config struct

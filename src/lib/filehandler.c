@@ -14,15 +14,10 @@
 #include "src/lib/log.h"
 #include "src/lib/mem.h"
 
-#include <dirent.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <time.h>
 #include <unistd.h>
-#include <utime.h>
+
 
 /**
  * Writes data to a file, overwrites existing files.
