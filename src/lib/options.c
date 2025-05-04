@@ -12,10 +12,11 @@
 #include "src/lib/options.h"
 
 #include "src/lib/config.h"
+#include "src/lib/log.h"
+#include "src/lib/mem.h"
 
 #include <getopt.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 /**
@@ -38,7 +39,7 @@ static struct option long_options[] = {
  * @param cmd argv[0] from main function
  */
 static void print_usage(struct t_config *config, const char *cmd) {
-    (void)fprintf(stderr, "\nUsage: %s [OPTION]...\n\n"
+    printf("\nUsage: %s [OPTION]...\n\n"
                     "Keba UDP API Client %s\n"
                     "(c) 2025 Juergen Mang <mail@jcgames.de>\n"
                     "https://github.com/jcorporation/kebacc\n\n"
@@ -69,18 +70,18 @@ enum handle_options_rc handle_options(struct t_config *config, int argc, char **
     while ((n = getopt_long(argc, argv, "l:o:vhi:p:r:w:", long_options, &option_index)) != -1) {
         switch(n) {
             case 'l':
-                free(config->wallbox_listen);
+                FREE_PTR(config->wallbox_listen);
                 config->wallbox_listen = strdup(optarg);
                 break;
             case 'o':
-                //TODO
+                set_loglevel((int)strtol(optarg, NULL, 10));
                 break;
             case 'v':
             case 'h':
                 print_usage(config, argv[0]);
                 return OPTIONS_RC_EXIT;
             case 'i': {
-                free(config->wallbox_ip);
+                FREE_PTR(config->wallbox_ip);
                 config->wallbox_ip = strdup(optarg);
                 break;
             }
@@ -90,11 +91,11 @@ enum handle_options_rc handle_options(struct t_config *config, int argc, char **
                 break;
             }
             case 'r':
-                free(config->rest_listen);
+                FREE_PTR(config->rest_listen);
                 config->rest_listen = strdup(optarg);
                 break;
             case 'w':
-                free(config->workdir);
+                FREE_PTR(config->workdir);
                 config->workdir = strdup(optarg);
                 break;
             default:

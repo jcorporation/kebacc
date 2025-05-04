@@ -1,6 +1,6 @@
 /*
  SPDX-License-Identifier: GPL-3.0-or-later
- (c) 2018-2025 Juergen Mang <mail@jcgames.de>
+ (c) 2025 Juergen Mang <mail@jcgames.de>
  https://github.com/jcorporation/kebacc
 */
 
