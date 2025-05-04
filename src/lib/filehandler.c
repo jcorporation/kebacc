@@ -18,7 +18,6 @@
 #include <string.h>
 #include <unistd.h>
 
-
 /**
  * Writes data to a file, overwrites existing files.
  * @param basepath Base path to write to
