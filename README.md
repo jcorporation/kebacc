@@ -1,6 +1,6 @@
 # Client for the Keba Wallbox UDP API
 
-This is an implementation for the Keba Wallbox UDP API. It is written in C and has no dependencies besides standard C library functions.
+This is an implementation for the Keba Wallbox UDP API. It is written in C and has no dependencies besides the standard C library.
 
 It is based on the great [Mongoose - Embedded Web Server / Embedded Network Library](https://github.com/cesanta/mongoose).
 
@@ -10,6 +10,8 @@ It is based on the great [Mongoose - Embedded Web Server / Embedded Network Libr
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
 make -C build
 ```
+
+After this you find the binary in the `build/bin/` folder.
 
 ## Run
 
@@ -24,7 +26,7 @@ Options:
   -d, --rrdcached <uri>   rrdcached uri (default: )
   -h, --help              Displays this help
   -i, --wallbox <ip>      IP Address of your Keba wallbox
-  -l, --listen <uri>      Wallbox listen URI (default: udp://0.0.0.0:7090)
+  -l, --listen <uri>      Listen URI for wallbox responses (default: udp://0.0.0.0:7090)
   -o, --loglevel <level>  Syslog loglevel (default: 5 - NOTICE)
   -p, --poll <seconds>    Polling interval in seconds (default: 60)
   -r, --rest <uri>        REST listen URI (default: http://0.0.0.0:8090)
@@ -43,7 +45,7 @@ The received data is then published in different ways.
 
 - As files in the working directory.
 - Via REST-API
-- Sent to [rrdcached](https://oss.oetiker.ch/rrdtool/doc/rrdcached.en.html)
+- Sent to rrdcached via tcp
 
 ## REST API
 
@@ -57,9 +59,11 @@ The REST API response with a timestamp and the original response from the wallbo
 | GET | `/status/report2` | Response to `report 2` command. |
 | GET | `/status/report3` | Response to `report 3` command. |
 
-## Rrdcached
+## RRDCached
 
 Wallbox data from `report 2` and `report 3` can be sent to a rrdcached instance. To enable this, set a valid rrdcached URI (e. g. `tcp://127.0.0.1:42217`).
+
+- Read more about [rrdcached](https://oss.oetiker.ch/rrdtool/doc/rrdcached.en.html).
 
 ### RRD Definitions
 

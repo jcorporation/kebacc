@@ -48,7 +48,7 @@ static void print_usage(struct t_config *config, const char *cmd) {
         "  -d, --rrdcached <uri>   rrdcached uri (default: %s)\n"
         "  -h, --help              Displays this help\n"
         "  -i, --wallbox <ip>      IP Address of your Keba wallbox\n"
-        "  -l, --listen <uri>      Wallbox listen URI (default: %s)\n"
+        "  -l, --listen <uri>      Listen URI for wallbox responses (default: %s)\n"
         "  -o, --loglevel <level>  Syslog loglevel (default: 5 - NOTICE)\n"
         "  -p, --poll <seconds>    Polling interval in seconds (default: %lu)\n"
         "  -r, --rest <uri>        REST listen URI (default: %s)\n"

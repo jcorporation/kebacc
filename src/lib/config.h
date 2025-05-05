@@ -15,7 +15,7 @@
  * Static Kebacc configuration
  */
 struct t_config {
-    unsigned long poll;    //!< Poll interval for the server loop
+    unsigned long poll;    //!< Poll interval for the wallbox
     char *rest_listen;     //!< Listening URI for the REST HTTP service
     char *wallbox_listen;  //!< Listening URI for wallbox communication
     char *wallbox_ip;      //!< Wallbox IP
