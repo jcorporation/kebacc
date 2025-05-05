@@ -44,7 +44,7 @@ lint() {
     cd "$SCRIPT_PATH/src" || exit 1
     local RESULT
     RESULT=$(find ./ -name \*.c -print0 \
-        | xargs -0 clang-tidy --header-filter=.* --config-file="$SCRIPT_PATH/.clang-tidy" 2>/dev/null \
+        | xargs -0 clang-tidy --config-file="$SCRIPT_PATH/.clang-tidy" 2>/dev/null \
         | grep -v "warnings generated")
     if [ -n "$RESULT" ]
     then
