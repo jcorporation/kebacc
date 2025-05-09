@@ -61,11 +61,9 @@ The REST API response with a timestamp and the original response from the wallbo
 
 ## RRDCached
 
-Wallbox data from `report 2` and `report 3` can be sent to a rrdcached instance. To enable this, set a valid rrdcached URI (e. g. `tcp://127.0.0.1:42217`).
+Wallbox data from `report 2` and `report 3` can be sent to a RRDCached instance. To enable this, set a valid RRDCached URI (e. g. `tcp://127.0.0.1:42217`).
 
-- Read more about [rrdcached](https://oss.oetiker.ch/rrdtool/doc/rrdcached.en.html).
-
-### RRD Definitions
+- Read more about [RRDCached](https://oss.oetiker.ch/rrdtool/doc/rrdcached.en.html).
 
 ```sh
 export RRDCACHED_ADDRESS=127.0.0.1

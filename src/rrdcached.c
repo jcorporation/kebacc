@@ -50,7 +50,7 @@ void send_data_to_rrdcached(struct mg_mgr *mgr, enum wallbox_report report, stru
         }
     }
     else {
-        mg_send(mg_user_data->rrdached_conn, line, strlen(line));
+        mg_printf(mg_user_data->rrdached_conn, "%s\n", line);
         FREE_PTR(line);
     }
 }
