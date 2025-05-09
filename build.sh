@@ -41,11 +41,12 @@ build_release() {
 
 lint() {
     build_debug
+    echo "Running clang-tidy"
     cd "$SCRIPT_PATH/src" || exit 1
     local RESULT
     RESULT=$(find ./ -name \*.c -print0 \
         | xargs -0 clang-tidy --config-file="$SCRIPT_PATH/.clang-tidy" 2>/dev/null \
-        | grep -v "warnings generated")
+        | grep -v "warnings generated" || true)
     if [ -n "$RESULT" ]
     then
         echo "$RESULT"
