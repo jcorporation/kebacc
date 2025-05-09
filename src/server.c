@@ -37,6 +37,7 @@ bool mongoose_init(struct mg_mgr *mgr, struct t_config *config, struct t_mg_user
     mg_mgr_init(mgr);
     mgr->userdata = mg_user_data;
 
+    // Listener for the wallbox
     struct mg_connection *nc_wallbox = mg_listen(mgr, config->wallbox_listen, ev_handler_wallbox, NULL);
     if (nc_wallbox == NULL) {
         KEBACC_LOG_EMERG("Server: Can't bind to %s", config->wallbox_listen);
@@ -44,6 +45,7 @@ bool mongoose_init(struct mg_mgr *mgr, struct t_config *config, struct t_mg_user
     }
     KEBACC_LOG_NOTICE("Server: Listening on %s for wallbox responses", config->wallbox_listen);
 
+    // Listener for the REST API
     struct mg_connection *nc_rest = mg_http_listen(mgr, config->rest_listen, ev_handler_rest, NULL);
     if (nc_rest == NULL) {
         KEBACC_LOG_EMERG("Server: Can't bind to %s", config->rest_listen);

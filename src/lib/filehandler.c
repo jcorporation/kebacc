@@ -30,7 +30,7 @@ bool write_data_to_file(const char *basepath, const char *filename, const char *
     char tmp_file[1024];
     int len = snprintf(tmp_file, 1024, "%s/%s.XXXXXX", basepath, filename);
     if (len < 0 || len >= 1024) {
-        KEBACC_LOG_ERROR("Filepath is to long");
+        KEBACC_LOG_ERROR("Filepath is too long");
         return false;
     }
     FILE *fp = open_tmp_file(tmp_file);
