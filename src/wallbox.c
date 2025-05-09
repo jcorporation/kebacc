@@ -24,12 +24,12 @@ void timer_wallbox_send_cmd(void *arg, const char *cmd) {
     struct mg_mgr *mgr = (struct mg_mgr *) arg;
     struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) mgr->userdata;
     if (mg_user_data->wallbox_conn != NULL) {
-        KEBACC_LOG_DEBUG("Sending \"%s\"", cmd);
+        KEBACC_LOG_DEBUG("Wallbox: Sending \"%s\"", cmd);
         mg_send(mg_user_data->wallbox_conn, cmd, strlen(cmd));
     }
     else {
         // This should not appear
-        KEBACC_LOG_ERROR("No wallbox connection available.");
+        KEBACC_LOG_ERROR("Wallbox: No connection available.");
     }
 }
 
@@ -83,7 +83,7 @@ void ev_handler_wallbox(struct mg_connection *nc, int ev, void *ev_data) {
         nc->rem.port = mg_htons(WALLBOX_API_PORT);
         mg_aton(mg_str(config->wallbox_ip), (struct mg_addr *)nc->rem.ip);
         // Send initial request
-        KEBACC_LOG_DEBUG("Sending \"i\"");
+        KEBACC_LOG_DEBUG("Wallbox: Sending \"i\"");
         mg_send(nc, "i", 1);
     }
     else if (ev == MG_EV_READ) {

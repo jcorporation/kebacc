@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     log_on_tty = isatty(fileno(stdout));
     #ifdef KEBACC_DEBUG
         set_loglevel(LOG_DEBUG);
-        KEBACC_LOG_NOTICE("Debug build is running");
+        KEBACC_LOG_NOTICE("Main: Debug build is running");
     #else
         set_loglevel(LOG_NOTICE);
     #endif
@@ -59,19 +59,19 @@ int main(int argc, char **argv) {
     //go into workdir
     errno = 0;
     if (chdir(config->workdir) != 0) {
-        KEBACC_LOG_ERROR("Can not change directory to \"%s\"", config->workdir);
+        KEBACC_LOG_ERROR("Main: Can not change directory to \"%s\"", config->workdir);
         KEBACC_LOG_ERRNO(errno);
         goto cleanup;
     }
 
-    KEBACC_LOG_NOTICE("Starting kebacc %s", KEBACC_VERSION);
-    KEBACC_LOG_INFO("Mongoose %s", MG_VERSION);
+    KEBACC_LOG_NOTICE("Main: Starting kebacc %s", KEBACC_VERSION);
+    KEBACC_LOG_INFO("Main: Mongoose %s", MG_VERSION);
 
     //set output buffers
     if (setvbuf(stdout, NULL, _IOLBF, 0) != 0 ||
         setvbuf(stderr, NULL, _IOLBF, 0) != 0)
     {
-        KEBACC_LOG_EMERG("Could not set stdout and stderr buffer");
+        KEBACC_LOG_EMERG("Main: Could not set stdout and stderr buffer");
         goto cleanup;
     }
 
@@ -98,10 +98,10 @@ int main(int argc, char **argv) {
         mg_user_data_free(mg_user_data);
     }
     if (rc == EXIT_SUCCESS) {
-        printf("Exiting gracefully\n");
+        printf("Main: Exiting gracefully\n");
     }
     else {
-        printf("Exiting erroneous\n");
+        printf("Main: Exiting erroneous\n");
     }
 
     return rc;

@@ -32,7 +32,7 @@ void ev_handler_rest(struct mg_connection *nc, int ev, void *ev_data) {
     if (ev == MG_EV_HTTP_MSG) {
         struct mg_http_message *hm = (struct mg_http_message *) ev_data;
         bool rc = false;
-        KEBACC_LOG_DEBUG("HTTP request to %.*s", (int)hm->uri.len, hm->uri.buf);
+        KEBACC_LOG_DEBUG("Rest: HTTP request %.*s", (int)hm->uri.len, hm->uri.buf);
         if (mg_strcmp(hm->method, mg_str("GET")) == 0) {
             rc = rest_get(nc, hm);
         }

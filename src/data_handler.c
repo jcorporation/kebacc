@@ -33,23 +33,26 @@ static void setdata(struct t_wallbox_response *response, char *data);
 bool data_handler(struct mg_connection *nc) {
     struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) nc->mgr->userdata;
     struct t_config *config = mg_user_data->config;
-    // Copy received data in NULL-terminated string while removing white space characters.
+    // Copy received data in NULL-terminated string while removing white space and newline characters.
     char *data = malloc_assert(nc->recv.len + 1);
     size_t data_len = 0;
     for (size_t i = 0; i < nc->recv.len; i++) {
-        if (isblank(nc->recv.buf[i]) == false) {
+        if (isblank(nc->recv.buf[i]) == false &&
+            nc->recv.buf[i] != '\r' &&
+            nc->recv.buf[i] != '\n')
+        {
             data[data_len++] = (char)nc->recv.buf[i];
         }
     }
     data[data_len] = '\0';
     data_len++;
-    KEBACC_LOG_DEBUG("Received data: %s", data);
+    KEBACC_LOG_DEBUG("Wallbox: Received data: %s", data);
     if (data_len < 8) {
-        KEBACC_LOG_ERROR("Invalid data received.");
+        KEBACC_LOG_ERROR("Wallbox: Invalid data received.");
         return false;
     }
-    switch(data[8]) {
-        case 'e':
+    switch(data[7]) {
+        case 'r':
             setdata(&mg_user_data->wallbox_status.i, data);
             write_data_to_file(config->workdir, "wallbox_i.txt", data, data_len);
             return true;
@@ -72,7 +75,7 @@ bool data_handler(struct mg_connection *nc) {
             }
             return true;
         default:
-            KEBACC_LOG_WARN("Unhandled data received: %c", data[7]);
+            KEBACC_LOG_WARN("Wallbox: Unhandled data received: %c", data[7]);
     }
     return false;
 }
