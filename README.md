@@ -64,7 +64,8 @@ Wallbox data from `report 2` and `report 3` can be sent to a rrdcached instance.
 ### RRD Definitions
 
 ```sh
-rrdtool create /var/lib/kebacc/report1.rrd --start now-2h --step 1m \
+export RRDCACHED_ADDRESS=127.0.0.1
+rrdtool create report1.rrd --start now-2h --step 1m \
     DS:state:GAUGE:2m:0:U \
     DS:maxcurr:GAUGE:2m:0:U \
     RRA:AVERAGE:0.5:1m:2d \
@@ -73,7 +74,7 @@ rrdtool create /var/lib/kebacc/report1.rrd --start now-2h --step 1m \
     RRA:AVERAGE:0.5:1h:20y \
     RRA:AVERAGE:0.5:1d:30y
 
-rrdtool create /var/lib/kebacc/report2.rrd --start now-2h --step 1m \
+rrdtool create report2.rrd --start now-2h --step 1m \
     DS:p:GAUGE:2m:0:U \
     RRA:AVERAGE:0.5:1m:2d \
     RRA:AVERAGE:0.5:5m:8d \

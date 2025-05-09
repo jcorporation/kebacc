@@ -22,7 +22,7 @@ build_debug() {
 }
 
 build_release() {
-    echo "Debug relase"
+    echo "Release build"
     install -d build
     cmake -B build \
         -DCMAKE_INSTALL_PREFIX:PATH=/usr \
