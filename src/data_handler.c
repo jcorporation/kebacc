@@ -75,7 +75,12 @@ bool data_handler(struct mg_connection *nc) {
             }
             return true;
         default:
-            KEBACC_LOG_WARN("Wallbox: Unhandled data received: %c", data[7]);
+            if (strncmp(data, "{\"Epres\":", 8) == 0) {
+                //Energy transferred in the current charging session in 0.1 Wh
+            }
+            else {
+                KEBACC_LOG_WARN("Wallbox: Unhandled data received: %s", data);
+            }
     }
     return false;
 }
