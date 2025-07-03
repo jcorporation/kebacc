@@ -25,8 +25,8 @@
 #define RRDCACHED_URI ""
 
 // rrd filenames
-#define RRD_REPORT2 "report2.rrd"
-#define RRD_REPORT3 "report3.rrd"
+#define RRD_REPORT2 "keba_report2.rrd"
+#define RRD_REPORT3 "keba_report3.rrd"
 
 // Log level
 #define LOGLEVEL_MIN 0
