@@ -33,6 +33,9 @@ static void mongoose_log(char ch, void *param);
  * @return true on success, else false
  */
 bool mongoose_init(struct mg_mgr *mgr, struct t_config *config, struct t_mg_user_data *mg_user_data) {
+    // Set mongoose loglevel to error
+    mg_log_set(1);
+    mg_log_set_fn(mongoose_log, NULL);
     // Init mongoose mgr
     mg_mgr_init(mgr);
     mgr->userdata = mg_user_data;
@@ -79,9 +82,6 @@ void mongoose_free(struct mg_mgr *mgr) {
 void mongoose_loop(struct mg_mgr *mgr) {
     //struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) mgr->userdata;
     //struct t_config *config = mg_user_data->config;
-    // Set mongoose loglevel to error
-    mg_log_set(1);
-    mg_log_set_fn(mongoose_log, NULL);
     for (;;) {
         // Webserver polling
         mg_mgr_poll(mgr, 10000);
