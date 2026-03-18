@@ -41,6 +41,7 @@ void timer_wallbox_send_report_1(void *arg) {
     struct mg_mgr *mgr = (struct mg_mgr *) arg;
     struct t_mg_user_data *mg_user_data = (struct t_mg_user_data *) mgr->userdata;
     struct t_config *config = mg_user_data->config;
+    KEBACC_LOG_INFO("Connecting to wallbox %s", mg_user_data->config->wallbox_ip);
     timer_wallbox_send_cmd(arg, "report 1");
     // Add timer for "report 3".
     mg_timer_add(mgr, (unsigned)config->poll, MG_TIMER_REPEAT, timer_wallbox_send_report_3, mgr);
